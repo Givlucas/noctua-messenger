@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
 
         //Starts and binds a service
         val intent = Intent(this, MsgServer::class.java)
-        startForegroundService(intent)
         //bindService(intent, ConnectToBound, BIND_AUTO_CREATE)
+        startForegroundService(intent)
 
         //TEST BUTTONS
         stopservice = findViewById(R.id.buttonstop)

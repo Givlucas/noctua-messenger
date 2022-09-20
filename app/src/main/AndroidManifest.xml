@@ -20,8 +20,6 @@
         // Declare service
         <service
             android:name="com.messenger.msgServer.MsgServer"
-            android:process=":msgserver"
-            android:stopWithTask="false"
             />
         <activity
             android:name=".MainActivity"
