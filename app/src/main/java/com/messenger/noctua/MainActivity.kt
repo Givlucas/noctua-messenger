@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
+import android.widget.TextView
 import com.messenger.msgServer.*
 
 
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
 
     //TEST BUTTONS!!!!
     private lateinit var stopservice : Button
+    private lateinit var msgdisplay : TextView
+    private lateinit var update: Button
+
 
      private val ConnectToBound = object : ServiceConnection {
          override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {
@@ -36,26 +40,24 @@ class MainActivity : AppCompatActivity() {
 
         //Starts and binds a service
         val intent = Intent(this, MsgServer::class.java)
-        //bindService(intent, ConnectToBound, BIND_AUTO_CREATE)
+        bindService(intent, ConnectToBound, BIND_AUTO_CREATE)
         startForegroundService(intent)
 
         //TEST BUTTONS
         stopservice = findViewById(R.id.buttonstop)
+        update = findViewById(R.id.updateButton)
+        msgdisplay = findViewById(R.id.msgDisplay1)
 
         stopservice.setOnClickListener {
             //stops the unbound service
+            unbindService(ConnectToBound)
             Intent(this, MsgServer::class.java).also { intent ->
                 stopService(intent)
             }
         }
-    }
-    /*
-    override fun onDestroy() {
-        super.onDestroy()
-        //stops the unbound service
-        Intent(this, MsgServer::class.java).also { intent ->
-            stopService(intent)
+
+        update.setOnClickListener {
+            msgdisplay.text = msgservice?.getLastMsg()
         }
     }
-    */
 }

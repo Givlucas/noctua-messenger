@@ -28,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MsgServer : Service() {
+    private var lastmsg = "nothing"
 
     companion object {
         private const val PORT = 5001
@@ -45,11 +46,15 @@ class MsgServer : Service() {
                     )
                 }
                 post("/txt"){
-                    var receivedmsg = call.receiveText()
+                    lastmsg = call.receiveText()
                     call.response.status(HttpStatusCode.OK)
                 }
             }
         }
+    }
+
+    fun getLastMsg() : String {
+        return lastmsg
     }
 
     override fun onCreate() {
