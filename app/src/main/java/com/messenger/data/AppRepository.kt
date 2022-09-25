@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 
 class AppRepository(private val dao: DAO) {
 
-    val convos: LiveData<List<Conversations>> = dao.getConvos()
-    val contacts: LiveData<List<Contacts>> = dao.getContacts()
+    val getConvos: LiveData<List<Conversations>> = dao.getConvos()
+    val getContacts: LiveData<List<Contacts>> = dao.getContacts()
 
     suspend fun getConvo(convo: Conversations){
         dao.getConvo(convo.id)

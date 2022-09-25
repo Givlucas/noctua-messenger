@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import com.messenger.data.AppViewModel
+import com.messenger.data.Contacts
 import com.messenger.msgServer.*
 
 
@@ -21,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var msgdisplay : TextView
     private lateinit var update: Button
 
+    private lateinit var appViewModel: AppViewModel
 
      private val ConnectToBound = object : ServiceConnection {
          override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {
@@ -48,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         update = findViewById(R.id.updateButton)
         msgdisplay = findViewById(R.id.msgDisplay1)
 
+        //View model
+        appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
+        val user = Contacts(0, "test", "5555", "test.com")
+        appViewModel.addContact(user)
+
         stopservice.setOnClickListener {
             //stops the unbound service
             unbindService(ConnectToBound)
@@ -57,7 +66,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         update.setOnClickListener {
-            msgdisplay.text = msgservice?.getLastMsg()
+            //msgdisplay.text = msgservice?.getLastMsg()
+            msgdisplay.text = appViewModel.getContacts.toString()
+
         }
     }
 }

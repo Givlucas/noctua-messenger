@@ -8,14 +8,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.nio.file.attribute.UserPrincipal
 
-class ViewModel(application: Application): AndroidViewModel(application) {
-    private val convos: LiveData<List<Conversations>>
-    private val contacts: LiveData<List<Contacts>>
+class AppViewModel(application: Application): AndroidViewModel(application) {
     private val repository: AppRepository
+
+    val getConvos: LiveData<List<Conversations>>
+    val getContacts: LiveData<List<Contacts>>
 
     init {
         val appDao = AppDatabase.getDatabase(application).dao()
         repository = AppRepository(appDao)
+        getConvos = repository.getConvos
+        getContacts = repository.getContacts
     }
 
     fun addContact(user: Contacts){

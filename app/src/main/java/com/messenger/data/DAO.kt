@@ -10,15 +10,18 @@ import androidx.room.Query
 interface DAO {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addContact(user: Contacts)
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addPrimaryUser(user: PrimaryUser)
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addToConversation(user: Contacts)
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addMsg(msg: Msgs)
 
     //Selects all msgs that match the conversation ID
-    @Query("Select msg FROM msg_table WHERE convo = :convo ORDER BY time_stamp ASC")
+    @Query("Select * FROM msg_table WHERE convo = :convo ORDER BY time_stamp ASC")
     fun getConvo(convo: Int): LiveData<List<Msgs>>
 
     //Gets all contacts

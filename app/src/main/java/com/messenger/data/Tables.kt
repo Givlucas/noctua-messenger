@@ -23,25 +23,29 @@ data class PrimaryUser(
     )
 
 @Entity(
+    /*
     foreignKeys = [ForeignKey(
         entity = Contacts::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("user"),
         onDelete = ForeignKey.CASCADE
-    )],
+    )],*/
     tableName = "conversation_table"
 )
 data class Conversations(
+
     @PrimaryKey(autoGenerate = true)
     val id: Int,
+    /*
     @Relation(
         parentColumn = "id",
         entityColumn = "user"
     )
-    val user: Contacts
+     */
+    val user: Int
 )
 
-@Entity(
+@Entity(/*
     foreignKeys = [ForeignKey(
         entity = Contacts::class,
         parentColumns = arrayOf("id"),
@@ -54,21 +58,26 @@ data class Conversations(
                 childColumns = arrayOf("convos"),
                 onDelete = ForeignKey.CASCADE
             )],
+            */
     tableName = "msg_table"
 )
 data class Msgs(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
+    /*
     @Relation(
         parentColumn = "id",
         entityColumn = "user"
-    )
-    val user: Contacts,
+    )*/
+    val user: Int,
+
+    /*
     @Relation(
         parentColumn = "id",
         entityColumn = "convo"
     )
-    val convo: Conversations,
+     */
+    val convo: Int,
     val msg: String,
     val time_stamp: String
 )
