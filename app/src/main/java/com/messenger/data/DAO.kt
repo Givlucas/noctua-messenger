@@ -15,7 +15,7 @@ interface DAO {
     suspend fun addPrimaryUser(user: PrimaryUser)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun addToConversation(user: Contacts)
+    suspend fun addToConversation(convo: Conversations)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addMsg(msg: Msgs)

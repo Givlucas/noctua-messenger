@@ -19,8 +19,8 @@ class AppRepository(private val dao: DAO) {
         dao.addPrimaryUser(user)
     }
 
-    suspend fun addToConversation(user: Contacts){
-        dao.addToConversation(user)
+    suspend fun addToConversation(convo: Conversations){
+        dao.addToConversation(convo)
     }
 
     suspend fun addMsg(msg: Msgs){

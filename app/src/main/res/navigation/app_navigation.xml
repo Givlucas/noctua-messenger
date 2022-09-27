@@ -30,5 +30,9 @@
         android:id="@+id/addConvo"
         android:name="com.messenger.noctua.ui.add.addConvo"
         android:label="Start Conversation"
-        tools:layout="@layout/fragment_add_convo" />
+        tools:layout="@layout/fragment_add_convo" >
+        <action
+            android:id="@+id/action_addConvo_to_contacts_nav"
+            app:destination="@id/contacts_nav" />
+    </fragment>
 </navigation>

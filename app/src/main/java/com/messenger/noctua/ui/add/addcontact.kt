@@ -43,13 +43,13 @@ class addcontact : Fragment() {
 
         if(inputCheck(username, address)){
             //Create user
-            val user = Contacts(0, username, "TEST", address)
+            val user = Contacts(username, "TEST", address)
             appViewModel.addContact(user)
-            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
             //Nav back
             findNavController().navigate(R.id.action_addcontact_to_contacts_nav)
         } else {
-            Toast.makeText(requireContext(), "Check all fields.", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), "Check all fields.", Toast.LENGTH_LONG).show()
         }
     }
 

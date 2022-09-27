@@ -6,8 +6,7 @@ import java.security.PublicKey
 // Table to store information about various contacts
 @Entity(tableName = "contacts_table")
 data class Contacts (
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey(autoGenerate = false)
     val user: String,
     val key: String,
     val address: String
@@ -42,7 +41,8 @@ data class Conversations(
         entityColumn = "user"
     )
      */
-    val user: Int
+    val user: String,
+    val convoName: String
 )
 
 @Entity(/*

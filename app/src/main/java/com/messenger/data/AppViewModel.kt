@@ -3,8 +3,10 @@ package com.messenger.data
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.nio.file.attribute.UserPrincipal
 
@@ -26,5 +28,12 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
             repository.addContact(user)
         }
     }
+
+    fun addConvo(convo: Conversations){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.addToConversation(convo)
+        }
+    }
+
 
 }
