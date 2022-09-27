@@ -35,5 +35,11 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun getMsgs(id: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.getConvo(id)
+        }
+    }
+
 
 }

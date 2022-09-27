@@ -7,8 +7,8 @@ class AppRepository(private val dao: DAO) {
     val getConvos: LiveData<List<Conversations>> = dao.getConvos()
     val getContacts: LiveData<List<Contacts>> = dao.getContacts()
 
-    suspend fun getConvo(convo: Conversations){
-        dao.getConvo(convo.id)
+    suspend fun getConvo(id: Int){
+        dao.getConvo(id)
     }
 
     suspend fun addContact(user: Contacts){

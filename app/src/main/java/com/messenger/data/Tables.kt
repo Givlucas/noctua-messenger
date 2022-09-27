@@ -69,7 +69,7 @@ data class Msgs(
         parentColumn = "id",
         entityColumn = "user"
     )*/
-    val user: Int,
+    val user: String,
 
     /*
     @Relation(

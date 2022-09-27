@@ -1,5 +1,6 @@
 package com.messenger.msgServer
 
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -12,8 +13,10 @@ import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.messenger.data.AppDatabase
+import com.messenger.data.AppRepository
+import com.messenger.data.Msgs
 import com.messenger.noctua.MainActivity
-import com.messenger.noctua.R
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -26,6 +29,7 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class MsgServer : Service() {
     private var lastmsg = "nothing"
@@ -34,7 +38,12 @@ class MsgServer : Service() {
         private const val PORT = 5001
     }
 
+    //Database access
+    private val appDao = AppDatabase.getDatabase(this).dao()
+    private val repository = AppRepository(appDao)
+
     private val server by lazy {
+
         embeddedServer(Netty, PORT, watchPaths = emptyList()) {
             install(WebSockets)
             install(CallLogging)
@@ -47,6 +56,12 @@ class MsgServer : Service() {
                 }
                 post("/txt"){
                     lastmsg = call.receiveText()
+                    val msg = Msgs(0, "test", 1, lastmsg, LocalDateTime.now().toString())
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        repository.addMsg(msg)
+                    }
+
                     call.response.status(HttpStatusCode.OK)
                 }
             }

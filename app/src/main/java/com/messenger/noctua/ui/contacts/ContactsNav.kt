@@ -6,16 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.messenger.data.AppViewModel
+import com.messenger.data.Contacts
+import com.messenger.data.Conversations
 import com.messenger.noctua.R
 import kotlinx.android.synthetic.main.fragment_contacts_nav.view.*
 
-class ContactsNav : Fragment() {
+class ContactsNav() : Fragment() {
 
     private lateinit var appViewModel: AppViewModel
 
@@ -28,7 +31,8 @@ class ContactsNav : Fragment() {
 
         //RecyclerView
         val adapter = ContactAdapter(){
-            Toast.makeText(requireContext(), it.user, Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_contacts_nav_to_convo_display,
+                bundleOf(Pair("CONVERSATION", it.id)))
         }
 
         val recyclerView = view.contactRecyclerView
