@@ -26,4 +26,5 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
             repository.addContact(user)
         }
     }
+
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/contacts_nav">
+
+    <fragment
+        android:id="@+id/contacts_nav"
+        android:name="com.messenger.noctua.ui.contacts.ContactsNav"
+        android:label="Contacts"
+        tools:layout="@layout/fragment_contacts_nav" >
+        <action
+            android:id="@+id/action_contacts_nav_to_addcontact"
+            app:destination="@id/addcontact" />
+        <action
+            android:id="@+id/action_contacts_nav_to_addConvo"
+            app:destination="@id/addConvo" />
+    </fragment>
+    <fragment
+        android:id="@+id/addcontact"
+        android:name="com.messenger.noctua.ui.add.addcontact"
+        android:label="Add Contact"
+        tools:layout="@layout/fragment_addcontact" >
+        <action
+            android:id="@+id/action_addcontact_to_contacts_nav"
+            app:destination="@id/contacts_nav" />
+    </fragment>
+    <fragment
+        android:id="@+id/addConvo"
+        android:name="com.messenger.noctua.ui.add.addConvo"
+        android:label="Start Conversation"
+        tools:layout="@layout/fragment_add_convo" />
+</navigation>

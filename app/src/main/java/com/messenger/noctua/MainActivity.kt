@@ -8,7 +8,12 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.messenger.data.AppViewModel
 import com.messenger.data.Contacts
 import com.messenger.msgServer.*
@@ -18,11 +23,6 @@ import com.messenger.msgServer.*
 class MainActivity : AppCompatActivity() {
     private var msgservice : MsgServer? = null
     private var isBound = false
-
-    //TEST BUTTONS!!!!
-    private lateinit var stopservice : Button
-    private lateinit var msgdisplay : TextView
-    private lateinit var update: Button
 
     private lateinit var appViewModel: AppViewModel
 
@@ -47,16 +47,13 @@ class MainActivity : AppCompatActivity() {
         bindService(intent, ConnectToBound, BIND_AUTO_CREATE)
         startForegroundService(intent)
 
-        //TEST BUTTONS
-        stopservice = findViewById(R.id.buttonstop)
-        update = findViewById(R.id.updateButton)
-        msgdisplay = findViewById(R.id.msgDisplay1)
+        //Dynamic action bar
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+                as NavHostFragment
+        val navController: NavController = navHostFragment.navController
+        setupActionBarWithNavController(navController)
 
-        //View model
-        appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
-        val user = Contacts(0, "test", "5555", "test.com")
-        appViewModel.addContact(user)
-
+    /*
         stopservice.setOnClickListener {
             //stops the unbound service
             unbindService(ConnectToBound)
@@ -64,11 +61,12 @@ class MainActivity : AppCompatActivity() {
                 stopService(intent)
             }
         }
+        */
 
-        update.setOnClickListener {
-            //msgdisplay.text = msgservice?.getLastMsg()
-            msgdisplay.text = appViewModel.getContacts.toString()
+    }
 
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.fragmentContainerView)
+        return super.onSupportNavigateUp() || navController.navigateUp()
     }
 }

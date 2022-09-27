@@ -26,4 +26,6 @@ class AppRepository(private val dao: DAO) {
     suspend fun addMsg(msg: Msgs){
         dao.addMsg(msg)
     }
+
+
 }
