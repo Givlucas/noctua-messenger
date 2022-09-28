@@ -69,4 +69,8 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.fragmentContainerView)
         return super.onSupportNavigateUp() || navController.navigateUp()
     }
+
+    internal fun hello(){
+
+    }
 }

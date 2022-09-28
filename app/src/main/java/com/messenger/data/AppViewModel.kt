@@ -15,12 +15,14 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
 
     val getConvos: LiveData<List<Conversations>>
     val getContacts: LiveData<List<Contacts>>
+    var getConvo: LiveData<List<Msgs>>
 
     init {
         val appDao = AppDatabase.getDatabase(application).dao()
         repository = AppRepository(appDao)
         getConvos = repository.getConvos
         getContacts = repository.getContacts
+        getConvo = MutableLiveData<List<Msgs>>()
     }
 
     fun addContact(user: Contacts){
@@ -37,7 +39,7 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
 
     fun getMsgs(id: Int){
         viewModelScope.launch(Dispatchers.IO){
-            repository.getConvo(id)
+            getConvo = repository.getConvo(id)
         }
     }
 
