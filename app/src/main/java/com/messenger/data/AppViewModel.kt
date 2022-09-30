@@ -1,6 +1,10 @@
 package com.messenger.data
 
 import android.app.Application
+import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,19 +19,18 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
 
     val getConvos: LiveData<List<Conversations>>
     val getContacts: LiveData<List<Contacts>>
-    var getConvo: LiveData<List<Msgs>>
 
     init {
         val appDao = AppDatabase.getDatabase(application).dao()
         repository = AppRepository(appDao)
         getConvos = repository.getConvos
         getContacts = repository.getContacts
-        getConvo = MutableLiveData<List<Msgs>>()
     }
 
     fun addContact(user: Contacts){
         viewModelScope.launch(Dispatchers.IO){
             repository.addContact(user)
+
         }
     }
 
@@ -37,10 +40,12 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun getMsgs(id: Int){
-        viewModelScope.launch(Dispatchers.IO){
-            getConvo = repository.getConvo(id)
-        }
+    fun getMsgs(id: Int): LiveData<List<Msgs>>{
+        return repository.getConvo(id)
+    }
+
+    fun instanctGetContacts(): List<Contacts>{
+        return repository.instantGetContacts()
     }
 
 

@@ -1,10 +1,7 @@
 package com.messenger.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface DAO {
@@ -27,6 +24,10 @@ interface DAO {
     //Gets all contacts
     @Query("Select * FROM contacts_table")
     fun getContacts(): LiveData<List<Contacts>>
+
+    //Gets all contacts
+    @Query("Select * FROM contacts_table")
+    fun instantGetContacts(): List<Contacts>
 
     //Gets Information about primary user
     @Query("Select * FROM primary_user_table")

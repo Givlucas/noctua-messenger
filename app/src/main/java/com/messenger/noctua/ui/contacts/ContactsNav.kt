@@ -41,8 +41,8 @@ class ContactsNav() : Fragment() {
 
         //Init view model
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
-        appViewModel.getConvos.observe(viewLifecycleOwner, Observer { conversation ->
-            adapter.setData(conversation)
+        appViewModel.getConvos.observe(viewLifecycleOwner, Observer { conversations ->
+            adapter.setData(conversations)
         })
 
         view.findViewById<FloatingActionButton>(R.id.addContactfbt).setOnClickListener{

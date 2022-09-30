@@ -5,15 +5,20 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.messenger.data.AppViewModel
 import com.messenger.data.Conversations
+import com.messenger.data.Msgs
 import com.messenger.msgServer.MsgServer
 import com.messenger.noctua.MainActivity
 import com.messenger.noctua.R
@@ -32,13 +37,18 @@ class Convo_display : Fragment() {
         val convo = arguments?.getInt("CONVERSATION")
         //database access
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
+        //HINT::::: (activity as MainActivity?)!!.hello()
 
-        //TEST stuff
+        //recyclerview init
+        val adapter = ConvoAdapter()
+        val recyclerView = view.msgs_recylcer_view
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         appViewModel.getMsgs(convo!!)
-        view.testpass.text = appViewModel.getConvo.toString()
 
-        //(activity as MainActivity?)!!.hello()
-
+        appViewModel.getMsgs(convo).observe(viewLifecycleOwner, Observer { conversation ->
+            adapter.setData(conversation)
+        })
 
 
         return view
