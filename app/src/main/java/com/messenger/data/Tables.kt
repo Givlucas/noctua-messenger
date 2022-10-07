@@ -32,7 +32,6 @@ data class PrimaryUser(
     tableName = "conversation_table"
 )
 data class Conversations(
-
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     /*

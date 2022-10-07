@@ -17,15 +17,14 @@ import com.messenger.data.AppDatabase
 import com.messenger.data.AppRepository
 import com.messenger.data.Msgs
 import com.messenger.noctua.MainActivity
-import io.ktor.application.*
-import io.ktor.features.*
+import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.websocket.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,8 +44,6 @@ class MsgServer : Service() {
     private val server by lazy {
 
         embeddedServer(Netty, PORT, watchPaths = emptyList()) {
-            install(WebSockets)
-            install(CallLogging)
             routing {
                 get("/") {
                     call.respondText(
@@ -136,3 +133,8 @@ class MsgServer : Service() {
     }
 
 }
+
+data class JsonMsg(
+    val convoEncrypt: String,
+    val msgEncrypt: String
+)

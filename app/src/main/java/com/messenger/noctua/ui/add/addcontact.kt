@@ -42,11 +42,11 @@ class addcontact : Fragment() {
     private fun insertDataToDataBase() {
         val username = nameet.text.toString()
         val address = addresset.text.toString()
+        val key = keyet.text.toString()
 
-        if(inputCheck(username, address) && checkAvailable(username)){
+        if(inputCheck(username, address, key) && checkAvailable(username)){
             //Create user
-            val user = Contacts(username, "TEST", address)
-            val users = appViewModel.getContacts
+            val user = Contacts(username, key, address)
 
             appViewModel.addContact(user)
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
@@ -54,26 +54,20 @@ class addcontact : Fragment() {
             //Nav back
             findNavController().navigate(R.id.action_addcontact_to_contacts_nav)
         } else if(!checkAvailable(username)){
-            Toast.makeText(requireContext(), "Username taken", Toast.LENGTH_LONG).show()
-        } else if(inputCheck(username, address)){
-            Toast.makeText(requireContext(), "Check all fields.", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Username taken", Toast.LENGTH_SHORT).show()
+        } else if(!inputCheck(username, address, key)){
+            Toast.makeText(requireContext(), "Check all fields.", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun inputCheck(username: String, address: String): Boolean {
-        return !(TextUtils.isEmpty(username) && TextUtils.isEmpty(address))
+    private fun inputCheck(username: String, address: String, key: String): Boolean {
+        return !(TextUtils.isEmpty(username) || TextUtils.isEmpty(address) || TextUtils.isEmpty(key))
     }
 
     private fun checkAvailable(username: String): Boolean{
-        val contacts = appViewModel.instanctGetContacts()
-        for(contact in contacts){
-            if(contact.user == username){
-                return false
-            }
-        }
-        return true
+        return !appViewModel.contactExists(username)
     }
 
 }

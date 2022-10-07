@@ -48,5 +48,8 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         return repository.instantGetContacts()
     }
 
+    fun contactExists(user: String ): Boolean{
+        return repository.contactExists(user)
+    }
 
 }
