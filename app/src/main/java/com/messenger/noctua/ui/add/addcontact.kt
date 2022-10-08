@@ -2,6 +2,7 @@ package com.messenger.noctua.ui.add
 
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
+import android.system.Os.bind
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,9 +15,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.messenger.data.AppViewModel
 import com.messenger.data.Contacts
+import com.messenger.data.Conversations
 import com.messenger.noctua.R
 import kotlinx.android.synthetic.main.fragment_addcontact.*
+import java.security.MessageDigest
 import kotlin.contracts.contract
+
 
 class addcontact : Fragment() {
 
@@ -42,12 +46,14 @@ class addcontact : Fragment() {
     private fun insertDataToDataBase() {
         val username = nameet.text.toString()
         val address = addresset.text.toString()
-        val key = keyet.text.toString()
+        var key = keyet.text.toString()
 
         if(inputCheck(username, address, key) && checkAvailable(username)){
             //Create user
+            key = hash(key)
             val user = Contacts(username, key, address)
-
+            val convo = Conversations(0, username, username)
+            appViewModel.addConvo(convo)
             appViewModel.addContact(user)
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
 
@@ -70,4 +76,10 @@ class addcontact : Fragment() {
         return !appViewModel.contactExists(username)
     }
 
+    private fun hash(key: String): String {
+        val bytes = key.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.fold("", { str, it -> str + "%02x".format(it) })
+    }
 }

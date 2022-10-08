@@ -52,5 +52,13 @@ class AppRepository(private val dao: DAO) {
         return dao.convoExists(convo)
     }
 
+    fun getContact(userName: String): Contacts{
+        return dao.getContact(userName)
+    }
+
+    fun getPrimaryUser(): PrimaryUser{
+        return dao.getPrimaryUserInfo()
+    }
+
 
 }

@@ -14,11 +14,10 @@ data class Contacts (
 
 @Entity(tableName = "primary_user_table")
 data class PrimaryUser(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     val id: Int,
-    val address: String,
-    val privateKey: String,
-    val publicKey: String
+    val userName: String,
+    val address: String
     )
 
 @Entity(
@@ -76,7 +75,7 @@ data class Msgs(
         entityColumn = "convo"
     )
      */
-    val convo: Int,
+    val convo: String,
     val msg: String,
     val time_stamp: String
 )

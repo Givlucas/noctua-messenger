@@ -50,7 +50,7 @@ class ContactsNav() : Fragment() {
         }
 
         view.findViewById<FloatingActionButton>(R.id.addConvofbt).setOnClickListener {
-            findNavController().navigate(R.id.action_contacts_nav_to_addConvo)
+            findNavController().navigate(R.id.action_contacts_nav_to_primaryUserInfo)
         }
 
 

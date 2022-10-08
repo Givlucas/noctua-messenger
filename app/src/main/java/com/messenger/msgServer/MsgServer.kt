@@ -11,14 +11,20 @@ import android.content.Intent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.util.Base64
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.messenger.data.AppDatabase
 import com.messenger.data.AppRepository
+import com.messenger.data.Contacts
 import com.messenger.data.Msgs
 import com.messenger.noctua.MainActivity
+import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.http.cio.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -28,10 +34,13 @@ import io.ktor.server.routing.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import io.ktor.client.engine.android.*
 import java.time.LocalDateTime
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 
 class MsgServer : Service() {
-    private var lastmsg = "nothing"
+    private lateinit var lastmsg: JsonMsg
 
     companion object {
         private const val PORT = 5001
@@ -40,6 +49,8 @@ class MsgServer : Service() {
     //Database access
     private val appDao = AppDatabase.getDatabase(this).dao()
     private val repository = AppRepository(appDao)
+
+    val client = HttpClient(Android)
 
     private val server by lazy {
 
@@ -52,11 +63,16 @@ class MsgServer : Service() {
                     )
                 }
                 post("/txt"){
-                    lastmsg = call.receiveText()
-                    val msg = Msgs(0, "test", 1, lastmsg, LocalDateTime.now().toString())
-
+                    lastmsg = call.receive()
                     CoroutineScope(Dispatchers.IO).launch {
-                        repository.addMsg(msg)
+                        val contacts = repository.instantGetContacts()
+                        for(contact in contacts){
+                            val convo = decrypt(lastmsg.convoEncrypt, contact.key).toString()
+                            if(repository.contactExists(convo)){
+                                val msg = decrypt(lastmsg.msgEncrypt, contact.key).toString()
+                                repository.addMsg(Msgs(0,convo, convo, msg, LocalDateTime.now().toString()))
+                            }
+                        }
                     }
 
                     call.response.status(HttpStatusCode.OK)
@@ -65,9 +81,7 @@ class MsgServer : Service() {
         }
     }
 
-    fun getLastMsg() : String {
-        return lastmsg
-    }
+
 
     override fun onCreate() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -132,7 +146,34 @@ class MsgServer : Service() {
         notificationManager.createNotificationChannel(channel)
     }
 
+    suspend fun send(msg: String, convoName: String): HttpResponse {
+        val contact: Contacts = repository.getContact(convoName)
+        val convoEncrypt = encrypt(convoName, contact.key)
+        val msgEncrypt = encrypt(msg, contact.key)
+        return client.post(contact.address){
+            contentType(ContentType.Application.Json)
+            setBody(JsonMsg(convoEncrypt.toString(), msgEncrypt.toString()))
+        }
+    }
+
+    private fun encrypt(plain: String, keyString: String): ByteArray{
+        val bytekey = keyString.toByteArray()
+        val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
+        cipher.init(Cipher.ENCRYPT_MODE, certKey)
+
+        return cipher.doFinal(plain.toByteArray())
+    }
+
+    private fun decrypt(coded: String, keyString: String): ByteArray{
+        val bytekey = keyString.toByteArray()
+        val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
+        cipher.init(Cipher.DECRYPT_MODE, certKey)
+        return cipher.doFinal(coded.toByteArray())
+    }
 }
+
 
 data class JsonMsg(
     val convoEncrypt: String,

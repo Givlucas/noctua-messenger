@@ -26,11 +26,14 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         getConvos = repository.getConvos
         getContacts = repository.getContacts
     }
-
+    fun addPrimaryUser(user: PrimaryUser){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.addPrimaryUser(user)
+        }
+    }
     fun addContact(user: Contacts){
         viewModelScope.launch(Dispatchers.IO){
             repository.addContact(user)
-
         }
     }
 
@@ -50,6 +53,10 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
 
     fun contactExists(user: String ): Boolean{
         return repository.contactExists(user)
+    }
+
+    fun getPrimaryUser(): PrimaryUser{
+        return repository.getPrimaryUser()
     }
 
 }

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_contacts_nav_to_convo_display"
             app:destination="@id/convo_display" />
+        <action
+            android:id="@+id/action_contacts_nav_to_primaryUserInfo"
+            app:destination="@id/primaryUserInfo" />
     </fragment>
     <fragment
         android:id="@+id/addcontact"
@@ -45,6 +48,15 @@
         tools:layout="@layout/fragment_convo_display" >
         <action
             android:id="@+id/action_convo_display_to_contacts_nav"
+            app:destination="@id/contacts_nav" />
+    </fragment>
+    <fragment
+        android:id="@+id/primaryUserInfo"
+        android:name="com.messenger.noctua.ui.add.primaryUserInfo"
+        android:label="fragment_primary_user_info"
+        tools:layout="@layout/fragment_primary_user_info" >
+        <action
+            android:id="@+id/action_primaryUserInfo_to_contacts_nav"
             app:destination="@id/contacts_nav" />
     </fragment>
 </navigation>

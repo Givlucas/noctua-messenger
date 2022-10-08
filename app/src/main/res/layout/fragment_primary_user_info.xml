@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.messenger.noctua.ui.add.primaryUserInfo">
+
+
+    <TextView
+        android:id="@+id/userNametv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="116dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/addresstv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/userNametv"
+        app:layout_constraintTop_toBottomOf="@+id/userNametv" />
+
+    <EditText
+        android:id="@+id/newNameet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="88dp"
+        android:ems="10"
+        android:hint="New User Name"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addresstv" />
+
+    <EditText
+        android:id="@+id/newAddresset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="New Address"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/newNameet"
+        app:layout_constraintTop_toBottomOf="@+id/newNameet" />
+
+    <Button
+        android:id="@+id/changeen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Change Info"
+        app:layout_constraintEnd_toEndOf="@+id/newAddresset"
+        app:layout_constraintStart_toStartOf="@+id/newAddresset"
+        app:layout_constraintTop_toBottomOf="@+id/newAddresset" />
+</androidx.constraintlayout.widget.ConstraintLayout>

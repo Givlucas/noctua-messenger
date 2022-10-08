@@ -15,7 +15,7 @@ interface DAO {
     // Adds a primary user to the primary user table.
     // This is where data like username and current hidden address are stored.
     // On conflict the insertion fails and thows a fail exception
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPrimaryUser(user: PrimaryUser)
 
     // Adds a contact to a coversation by 
@@ -47,15 +47,18 @@ interface DAO {
     @Query("Select * FROM contacts_table")
     fun getContacts(): LiveData<List<Contacts>>
 
+    @Query("Select * FROM contacts_table WHERE user=:userName")
+    fun getContact(userName: String): Contacts
+
     // Gets all contacts and returns them as a regular list
-    // This is nessacry for when contacts must be 
-    // checked for validity an observer object would be uneccesary.
+    // This is necessary for when contacts must be
+    // checked for validity an observer object would be unnecessary.
     @Query("Select * FROM contacts_table")
     fun instantGetContacts(): List<Contacts>
 
     // Gets Information about primary user
     @Query("Select * FROM primary_user_table")
-    fun getPrimaryUserInfo(): LiveData<List<PrimaryUser>>
+    fun getPrimaryUserInfo(): PrimaryUser
 
     // Lists all Conversations is used in UI 
     // for listing all availble messages
