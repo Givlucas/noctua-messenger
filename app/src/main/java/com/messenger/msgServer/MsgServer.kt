@@ -14,17 +14,13 @@ import android.os.IBinder
 import android.util.Base64
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.messenger.data.AppDatabase
-import com.messenger.data.AppRepository
-import com.messenger.data.Contacts
-import com.messenger.data.Msgs
+import com.messenger.data.*
 import com.messenger.noctua.MainActivity
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.http.cio.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -35,9 +31,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import io.ktor.client.engine.android.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.serialization.kotlinx.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 import java.time.LocalDateTime
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
+import kotlinx.serialization.*
 
 class MsgServer : Service() {
     private lateinit var lastmsg: JsonMsg
@@ -50,7 +54,15 @@ class MsgServer : Service() {
     private val appDao = AppDatabase.getDatabase(this).dao()
     private val repository = AppRepository(appDao)
 
-    val client = HttpClient(Android)
+
+    val client = HttpClient(Android){
+        install(ContentNegotiation) {
+            json(Json {
+                prettyPrint = true
+                isLenient = true
+            })
+        }
+    }
 
     private val server by lazy {
 
@@ -146,18 +158,24 @@ class MsgServer : Service() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    suspend fun send(msg: String, convoName: String): HttpResponse {
+    suspend fun send(msg: String, convoName: String){
         val contact: Contacts = repository.getContact(convoName)
-        val convoEncrypt = encrypt(convoName, contact.key)
+        val primaryUser: PrimaryUser = repository.getPrimaryUser()
+        val convoEncrypt = encrypt(primaryUser.userName, contact.key)
         val msgEncrypt = encrypt(msg, contact.key)
-        return client.post(contact.address){
+        repository.addMsg(Msgs(0,"internal", convoName, msg,LocalDateTime.now().toString()))
+        val Jmsg = JsonMsg(convoEncrypt.toString(), msgEncrypt.toString())
+        val response = client.post {
+            url(contact.address)
             contentType(ContentType.Application.Json)
-            setBody(JsonMsg(convoEncrypt.toString(), msgEncrypt.toString()))
+            header(HttpHeaders.ContentType, Json)
+            setBody(Jmsg)
         }
+
     }
 
     private fun encrypt(plain: String, keyString: String): ByteArray{
-        val bytekey = keyString.toByteArray()
+        val bytekey = keyString.decodeHex()
         val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
         val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
         cipher.init(Cipher.ENCRYPT_MODE, certKey)
@@ -166,15 +184,24 @@ class MsgServer : Service() {
     }
 
     private fun decrypt(coded: String, keyString: String): ByteArray{
-        val bytekey = keyString.toByteArray()
+        val bytekey = keyString.decodeHex()
         val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
         val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
         cipher.init(Cipher.DECRYPT_MODE, certKey)
         return cipher.doFinal(coded.toByteArray())
     }
+
+    private fun String.decodeHex(): ByteArray {
+        check(length % 2 == 0) { "Must have an even length" }
+
+        return chunked(2)
+            .map { it.toInt(16).toByte() }
+            .toByteArray()
+    }
+
 }
 
-
+@Serializable
 data class JsonMsg(
     val convoEncrypt: String,
     val msgEncrypt: String

@@ -43,7 +43,7 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun getMsgs(id: Int): LiveData<List<Msgs>>{
+    fun getMsgs(id: String): LiveData<List<Msgs>>{
         return repository.getConvo(id)
     }
 

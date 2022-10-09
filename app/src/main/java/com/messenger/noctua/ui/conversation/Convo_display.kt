@@ -12,9 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.messenger.data.AppViewModel
 import com.messenger.data.Conversations
@@ -23,6 +21,8 @@ import com.messenger.msgServer.MsgServer
 import com.messenger.noctua.MainActivity
 import com.messenger.noctua.R
 import kotlinx.android.synthetic.main.fragment_convo_display.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class Convo_display : Fragment() {
 
@@ -34,22 +34,28 @@ class Convo_display : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_convo_display, container, false)
-        val convo = arguments?.getInt("CONVERSATION")
+        val convoName = arguments?.getString("CONVERSATION_NAME")
+        val convoID = arguments?.getInt("CONVERSATION_ID")
         //database access
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
-        //HINT::::: (activity as MainActivity?)!!.hello()
 
         //recyclerview init
         val adapter = ConvoAdapter()
         val recyclerView = view.msgs_recylcer_view
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        appViewModel.getMsgs(convo!!)
+        appViewModel.getMsgs(convoName!!)
 
-        appViewModel.getMsgs(convo).observe(viewLifecycleOwner, Observer { conversation ->
+        appViewModel.getMsgs(convoName).observe(viewLifecycleOwner, Observer { conversation ->
             adapter.setData(conversation)
         })
 
+        view.send_button.setOnClickListener{
+            lifecycleScope.launch(Dispatchers.IO) {
+                (activity as MainActivity?)!!.send(view.write_msg_et.text.toString(),
+                convoName!!)
+            }
+        }
 
         return view
     }

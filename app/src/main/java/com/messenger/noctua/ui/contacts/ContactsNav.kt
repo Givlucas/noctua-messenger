@@ -32,7 +32,8 @@ class ContactsNav() : Fragment() {
         //RecyclerView
         val adapter = ContactAdapter(){
             findNavController().navigate(R.id.action_contacts_nav_to_convo_display,
-                bundleOf(Pair("CONVERSATION", it.id)))
+                bundleOf(Pair("CONVERSATION_NAME", it.convoName),
+                    Pair("CONVERSATION_ID", it.id)))
         }
 
         val recyclerView = view.contactRecyclerView

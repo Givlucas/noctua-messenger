@@ -11,7 +11,7 @@ class AppRepository(private val dao: DAO) {
 
     // returns all the messages that have the same 
     // message ID orderd by time stamp
-    fun getConvo(id: Int): LiveData<List<Msgs>>{
+    fun getConvo(id: String): LiveData<List<Msgs>>{
         return dao.getConvo(id)
     }
     

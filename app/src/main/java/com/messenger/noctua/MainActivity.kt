@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         return super.onSupportNavigateUp() || navController.navigateUp()
     }
 
-    internal fun hello(){
-
+    internal suspend fun send(msg: String, convoName: String){
+        msgservice?.send(msg, convoName)
     }
 }

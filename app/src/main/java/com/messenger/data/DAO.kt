@@ -34,12 +34,12 @@ interface DAO {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addMsg(msg: Msgs)
 
-    // Selects all msgs that match the conversation ID
+    // Selects all msgs that match the conversation` ID
     // and returns them ordered by their timestamp.
     // This is used in the UI to 
     // show the message history of a coverstation.
     @Query("Select * FROM msg_table WHERE convo = :convo ORDER BY time_stamp ASC")
-    fun getConvo(convo: Int): LiveData<List<Msgs>>
+    fun getConvo(convo: String): LiveData<List<Msgs>>
     
     // Gets all contacts and returns them as a livedata object.
     // Live data objects are update when new data 
