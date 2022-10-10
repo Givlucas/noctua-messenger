@@ -16,8 +16,13 @@
         <entry key="app/src/main/res/layout/fragment_addcontact.xml" value="0.16510416666666666" />
         <entry key="app/src/main/res/layout/fragment_convo_display.xml" value="0.2777777777777778" />
         <entry key="app/src/main/res/layout/fragment_primary_user_info.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/menu_contact.xml" value="0.10833333333333334" />
+        <entry key="app/src/main/res/layout/menu_contacts.xml" value="0.10833333333333334" />
         <entry key="app/src/main/res/layout/msg_row_external.xml" value="0.375" />
         <entry key="app/src/main/res/layout/msg_row_internal.xml" value="0.25" />
+        <entry key="app/src/main/res/menu/contact_menu.xml" value="0.25" />
+        <entry key="app/src/main/res/menu/menu_contacts.xml" value="0.165" />
+        <entry key="app/src/main/res/xml/contact_menu.xml" value="0.10833333333333334" />
       </map>
     </option>
   </component>

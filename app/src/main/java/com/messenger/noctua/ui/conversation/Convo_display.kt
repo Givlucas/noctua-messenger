@@ -35,7 +35,6 @@ class Convo_display : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_convo_display, container, false)
         val convoName = arguments?.getString("CONVERSATION_NAME")
-        val convoID = arguments?.getInt("CONVERSATION_ID")
         //database access
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
