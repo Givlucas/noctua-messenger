@@ -17,12 +17,16 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.messenger.data.AppViewModel
 import com.messenger.data.Contacts
 import com.messenger.msgServer.*
+import com.messenger.tor.SampleApp
+
+
 
 
 
 class MainActivity : AppCompatActivity() {
     private var msgservice : MsgServer? = null
     private var isBound = false
+    private val app: SampleApp get() = applicationContext as SampleApp
 
     private lateinit var appViewModel: AppViewModel
 
@@ -46,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, MsgServer::class.java)
         bindService(intent, ConnectToBound, BIND_AUTO_CREATE)
         startForegroundService(intent)
+        app.torOperationManager.startQuietly()
 
         //Dynamic action bar
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
