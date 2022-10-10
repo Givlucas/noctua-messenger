@@ -160,8 +160,7 @@ class SampleApp: Application() {
 
                     put(HiddenService()
                         .setPorts(ports = setOf(
-                            HiddenService.Ports(virtualPort = Port(80), targetPort = Port(5001)), // http
-                            HiddenService.Ports(virtualPort = Port(443), targetPort = Port(5001)) // https
+                            HiddenService.Ports(virtualPort = Port(80), targetPort = Port(5001))
                         ))
                         .set(FileSystemDir(path =
                             workDir.builder {
@@ -267,13 +266,13 @@ class SampleApp: Application() {
             appScope.launch {
                 torControlManager.onionAddNew(
                     type = OnionAddress.PrivateKey.Type.ED25519_V3,
-                    hsPorts = setOf(HiddenService.Ports(virtualPort = Port(443))),
+                    hsPorts = setOf(HiddenService.Ports(virtualPort = Port(80), targetPort = Port(5001))),
                     flags = null,
                     maxStreams = null,
                 ).onSuccess { hsEntry ->
                     addLine(
                         "New HiddenService: " +
-                        "\n - Address: https://${hsEntry.address.canonicalHostname()}" +
+                        "\n - Address: http://${hsEntry.address.canonicalHostname()}" +
                         "\n - PrivateKey: ${hsEntry.privateKey}"
                     )
 
