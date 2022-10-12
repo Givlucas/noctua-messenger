@@ -60,5 +60,9 @@ class AppRepository(private val dao: DAO) {
         return dao.getPrimaryUserInfo()
     }
 
+    suspend fun updateAddress(addr: String){
+        dao.updateAddress(addr)
+    }
+
 
 }

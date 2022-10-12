@@ -16,9 +16,14 @@
 package com.messenger.tor
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.messenger.data.AppDatabase
+import com.messenger.data.AppRepository
+import com.messenger.data.AppViewModel
+import com.messenger.noctua.MainActivity
 import io.matthewnelson.kmp.tor.TorConfigProviderAndroid
 import io.matthewnelson.kmp.tor.KmpTorLoaderAndroid
 import io.matthewnelson.kmp.tor.common.address.*
@@ -37,6 +42,8 @@ import java.net.InetSocketAddress
 import kotlin.collections.ArrayList
 
 class SampleApp: Application() {
+
+    private var toraddr: MutableLiveData<String> = MutableLiveData("")
 
     private val providerAndroid by lazy {
         object : TorConfigProviderAndroid(context = this) {
@@ -200,10 +207,15 @@ class SampleApp: Application() {
         CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
     }
 
+    fun getAddr(): MutableLiveData<String>{
+        return toraddr
+    }
+
     private inner class TorListener: TorManagerEvent.Listener() {
         private val _eventLines: MutableLiveData<String> = MutableLiveData("")
         val eventLines: LiveData<String> = _eventLines
         private val events: MutableList<String> = ArrayList(50)
+
 
         fun addLine(line: String) {
             synchronized(this) {
@@ -275,12 +287,8 @@ class SampleApp: Application() {
                         "\n - Address: http://${hsEntry.address.canonicalHostname()}" +
                         "\n - PrivateKey: ${hsEntry.privateKey}"
                     )
+                    toraddr.setValue("http://${hsEntry.address.canonicalHostname()}")
 
-                    //torControlManager.onionDel(hsEntry.address).onSuccess {
-                    //    addLine("Aaaaaaaaand it's gone...")
-                    //}.onFailure { t ->
-                    //    t.printStackTrace()
-                    //}
                 }.onFailure { t ->
                     t.printStackTrace()
                 }

@@ -65,12 +65,17 @@ interface DAO {
     @Query("Select * FROM conversation_table")
     fun getConvos(): LiveData<List<Conversations>>
 
-    //Checks to see if a username exists or not
+    // Checks to see if a username exists or not
     @Query("SELECT EXISTS(SELECT * FROM contacts_table where user=:user)")
     fun contactExists(user: String): Boolean
 
-    //Check to see if a conversation exists
+    // Check to see if a conversation exists
     @Query("SELECT EXISTS(SELECT * FROM conversation_table where convoName=:convoName)")
     fun convoExists(convoName: String): Boolean
+
+    // Update primary user address
+    @Query("UPDATE primary_user_table SET address=:addr WHERE id=0")
+    fun updateAddress(addr: String)
+
 
 }

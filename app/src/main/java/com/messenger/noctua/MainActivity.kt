@@ -9,6 +9,9 @@ import android.os.IBinder
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.view.ActionMode
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -18,16 +21,14 @@ import com.messenger.data.AppViewModel
 import com.messenger.data.Contacts
 import com.messenger.msgServer.*
 import com.messenger.tor.SampleApp
-
-
-
+import kotlinx.coroutines.coroutineScope
 
 
 class MainActivity : AppCompatActivity() {
     private var msgservice : MsgServer? = null
     private var isBound = false
     private val app: SampleApp get() = applicationContext as SampleApp
-
+    private lateinit var toraddr: MutableLiveData<String>
     private lateinit var appViewModel: AppViewModel
 
      private val ConnectToBound = object : ServiceConnection {
@@ -45,12 +46,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //database access
+        appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
         //Starts and binds a service
         val intent = Intent(this, MsgServer::class.java)
         bindService(intent, ConnectToBound, BIND_AUTO_CREATE)
         startForegroundService(intent)
         app.torOperationManager.startQuietly()
+        app.getAddr().observe(this, Observer {  addr ->
+            appViewModel.updateAddress(addr)
+        })
+
 
         //Dynamic action bar
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
@@ -78,4 +85,5 @@ class MainActivity : AppCompatActivity() {
     internal suspend fun send(msg: String, convoName: String){
         msgservice?.send(msg, convoName)
     }
+
 }

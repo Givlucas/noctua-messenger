@@ -43,6 +43,12 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun updateAddress(address: String){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.updateAddress(address)
+        }
+    }
+
     fun getMsgs(id: String): LiveData<List<Msgs>>{
         return repository.getConvo(id)
     }
