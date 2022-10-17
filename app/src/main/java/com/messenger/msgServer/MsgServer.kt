@@ -100,10 +100,10 @@ class MsgServer : Service() {
                         // to see if that contact exits. If it can and the convo exists
                         // then it decrpyts the message and exits.
                         for(contact in contacts){
-                            val convo = decrypt(lastmsg.convoEncrypt, contact.key).toString()
+                            val convo = decrypt(lastmsg.convoEncrypt, contact.key)
                             Log.v("DE", convo + " " + lastmsg.convoEncrypt)
                             if(repository.contactExists(convo)){
-                                val msg = decrypt(lastmsg.msgEncrypt, contact.key).toString()
+                                val msg = decrypt(lastmsg.msgEncrypt, contact.key)
                                 repository.addMsg(Msgs(0,convo, convo, msg, LocalDateTime.now().toString()))
                             }
                         }
@@ -188,9 +188,12 @@ class MsgServer : Service() {
         val primaryUser: PrimaryUser = repository.getPrimaryUserInfo()
         val convoEncrypt = encrypt(primaryUser.userName, contact.key)
         val msgEncrypt = encrypt(msg, contact.key)
+
         repository.addMsg(Msgs(0,"internal", convoName, msg,LocalDateTime.now().toString()))
-        val Jmsg = JsonMsg(convoEncrypt.fold("", { str, it -> str + "%02x".format(it) }),
-            msgEncrypt.fold("", { str, it -> str + "%02x".format(it) }))
+
+        val Jmsg = JsonMsg(convoEncrypt,
+            msgEncrypt)
+
         val response = client.post {
             url(contact.address)
             contentType(ContentType.Application.Json)
@@ -202,22 +205,22 @@ class MsgServer : Service() {
 
     }
 
-    private fun encrypt(plain: String, keyString: String): ByteArray{
+     fun encrypt(plain: String, keyString: String): String{
         val iv: IvParameterSpec = IvParameterSpec("c4eb12ceccf2c3058d185f9356557e96".decodeHex())
         val bytekey = keyString.decodeHex()
         val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
         cipher.init(Cipher.ENCRYPT_MODE, certKey, iv)
-        return cipher.doFinal(Base64.getEncoder().encode(plain.toByteArray()))
+        return Base64.getEncoder().encodeToString(cipher.doFinal(plain.toByteArray()))
     }
 
-    private fun decrypt(coded: String, keyString: String): ByteArray{
+    fun decrypt(coded: String, keyString: String): String{
         val iv: IvParameterSpec = IvParameterSpec("c4eb12ceccf2c3058d185f9356557e96".decodeHex())
         val bytekey = keyString.decodeHex()
         val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
         cipher.init(Cipher.DECRYPT_MODE, certKey, iv)
-        return cipher.doFinal(Base64.getDecoder().decode(coded.decodeHex()))
+        return String(cipher.doFinal(Base64.getDecoder().decode(coded)))
     }
 
     private fun String.decodeHex(): ByteArray {
@@ -228,10 +231,10 @@ class MsgServer : Service() {
             .toByteArray()
     }
 
+    @Serializable
+    data class JsonMsg(
+        val convoEncrypt: String,
+        val msgEncrypt: String
+    )
 }
 
-@Serializable
-data class JsonMsg(
-    val convoEncrypt: String,
-    val msgEncrypt: String
-)

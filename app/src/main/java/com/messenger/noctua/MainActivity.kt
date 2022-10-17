@@ -6,6 +6,7 @@ import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.view.ActionMode
@@ -75,6 +76,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         */
+
+        //TEST
+
+
 
     }
 
