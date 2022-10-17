@@ -8,11 +8,17 @@ class AppRepository(private val dao: DAO) {
     //Inits variables that can me found on start
     val getConvos: LiveData<List<Conversations>> = dao.getConvos()
     val getContacts: LiveData<List<Contacts>> = dao.getContacts()
+    val primaryUser: LiveData<PrimaryUser> = dao.primaryUserInfo()
 
     // returns all the messages that have the same 
     // message ID orderd by time stamp
     fun getConvo(id: String): LiveData<List<Msgs>>{
         return dao.getConvo(id)
+    }
+
+    // Gets primary user information returns instantaneous
+    fun getPrimaryUserInfo(): PrimaryUser{
+        return dao.getPrimaryUserInfo()
     }
     
     // Gets all contacts as a list
@@ -52,14 +58,12 @@ class AppRepository(private val dao: DAO) {
         return dao.convoExists(convo)
     }
 
+    // Gets a contact, return instatneous
     fun getContact(userName: String): Contacts{
         return dao.getContact(userName)
     }
 
-    fun getPrimaryUser(): PrimaryUser{
-        return dao.getPrimaryUserInfo()
-    }
-
+    // Updates the address of the primary user
     suspend fun updateAddress(addr: String){
         dao.updateAddress(addr)
     }

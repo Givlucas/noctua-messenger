@@ -50,7 +50,7 @@ class addcontact : Fragment() {
 
         if(inputCheck(username, address, key) && checkAvailable(username)){
             //Create user
-            key = hash(key)
+            key = hash(key) // Hash the key so it can be used in AES256
             val user = Contacts(username, key, address)
             val convo = Conversations(0, username, username)
             appViewModel.addConvo(convo)
@@ -68,10 +68,12 @@ class addcontact : Fragment() {
         }
     }
 
+    // Cheks to ensure no field is left empty
     private fun inputCheck(username: String, address: String, key: String): Boolean {
         return !(TextUtils.isEmpty(username) || TextUtils.isEmpty(address) || TextUtils.isEmpty(key))
     }
 
+    // Checks if username is taken
     private fun checkAvailable(username: String): Boolean{
         return !appViewModel.contactExists(username)
     }

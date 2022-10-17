@@ -51,8 +51,14 @@ class Convo_display : Fragment() {
 
         view.send_button.setOnClickListener{
             lifecycleScope.launch(Dispatchers.IO) {
-                (activity as MainActivity?)!!.send(view.write_msg_et.text.toString(),
-                convoName!!)
+                try {
+                    (activity as MainActivity?)!!.send(
+                        view.write_msg_et.text.toString(),
+                        convoName!!
+                    )
+                } catch (e: Throwable){
+                    Log.v("OOP", e.toString())
+                }
             }
         }
 

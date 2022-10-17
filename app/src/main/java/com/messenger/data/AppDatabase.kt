@@ -18,9 +18,10 @@ abstract class AppDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
+        // Makes sure database is singleton.
+        // if database already exists return the database
         fun getDatabase(context: Context): AppDatabase{
             val tempInstance = INSTANCE
-
             if(tempInstance != null){
                 return tempInstance
             }

@@ -22,10 +22,10 @@
         android:layout_width="304dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="TextViewzfcdhgsfhghjkjhfghfdghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfghdfgh"
+        android:text="textview"
         android:textIsSelectable="true"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/userNametv"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="@+id/userNametv"
         app:layout_constraintTop_toBottomOf="@+id/userNametv" />
 

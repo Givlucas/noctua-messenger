@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, MsgServer::class.java)
         bindService(intent, ConnectToBound, BIND_AUTO_CREATE)
         startForegroundService(intent)
+        // starts the tor service
         app.torOperationManager.startQuietly()
         app.getAddr().observe(this, Observer {  addr ->
             appViewModel.updateAddress(addr)
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         return super.onSupportNavigateUp() || navController.navigateUp()
     }
 
+    // Function provided so fragment can send messages
     internal suspend fun send(msg: String, convoName: String){
         msgservice?.send(msg, convoName)
     }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.messenger.data.AppViewModel
 import com.messenger.data.PrimaryUser
@@ -23,16 +24,18 @@ class primaryUserInfo : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         appViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
-        val primary = appViewModel.getPrimaryUser()
+        val primary = appViewModel.primaryUser
         val view = inflater.inflate(R.layout.fragment_primary_user_info, container, false)
 
-        if(primary == null){
-            view.userNametv.text = "No user"
-            view.addresstv.text = "No user"
-        } else {
-            view.userNametv.text = primary.userName
-            view.addresstv.text = primary.address
-        }
+        primary.observe(viewLifecycleOwner, Observer { primary ->
+            if(primary == null){
+                view.userNametv.text = "No user"
+                view.addresstv.text = "No user"
+            } else {
+                view.userNametv.text = primary.userName
+                view.addresstv.text = primary.address
+            }
+        })
 
 
         view.changeen.setOnClickListener{

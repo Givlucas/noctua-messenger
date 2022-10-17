@@ -47,6 +47,7 @@ interface DAO {
     @Query("Select * FROM contacts_table")
     fun getContacts(): LiveData<List<Contacts>>
 
+    // gets a singular contact
     @Query("Select * FROM contacts_table WHERE user=:userName")
     fun getContact(userName: String): Contacts
 
@@ -57,6 +58,10 @@ interface DAO {
     fun instantGetContacts(): List<Contacts>
 
     // Gets Information about primary user
+    @Query("Select * FROM primary_user_table")
+    fun primaryUserInfo(): LiveData<PrimaryUser>
+
+    //gets non live
     @Query("Select * FROM primary_user_table")
     fun getPrimaryUserInfo(): PrimaryUser
 

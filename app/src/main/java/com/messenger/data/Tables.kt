@@ -3,6 +3,7 @@ package com.messenger.data
 import androidx.room.*
 import java.security.PublicKey
 
+// TODO("Clean up this code)
 // Table to store information about various contacts
 @Entity(tableName = "contacts_table")
 data class Contacts (

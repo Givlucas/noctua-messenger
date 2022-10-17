@@ -22,6 +22,9 @@ class ConvoAdapter: RecyclerView.Adapter<ConvoAdapter.ViewHolder>() {
 
 
     override fun getItemViewType(position: Int): Int {
+        // Splits the view into 2 types
+        // type 0 is messages that are sent from the host device
+        // type 1 are messages that are recieved from contacts
         return if(convoList[position].user == "internal"){
             0
         } else {

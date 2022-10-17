@@ -43,7 +43,7 @@ import kotlin.collections.ArrayList
 
 class SampleApp: Application() {
 
-    private var toraddr: MutableLiveData<String> = MutableLiveData("")
+    private var toraddr: MutableLiveData<String> = MutableLiveData("Loading ...")
 
     private val providerAndroid by lazy {
         object : TorConfigProviderAndroid(context = this) {
