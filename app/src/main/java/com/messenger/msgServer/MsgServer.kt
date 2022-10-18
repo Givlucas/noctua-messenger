@@ -1,7 +1,5 @@
 package com.messenger.msgServer
 
-import android.app.Application
-import java.util.Base64
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -18,34 +16,29 @@ import androidx.core.app.NotificationCompat
 import com.messenger.data.*
 import com.messenger.noctua.MainActivity
 import io.ktor.client.*
-import io.ktor.client.plugins.websocket.*
+import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import io.ktor.client.engine.android.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.serialization.kotlinx.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.util.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
 import java.time.LocalDateTime
+import java.util.*
 import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
-import kotlinx.serialization.*
 import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 class MsgServer : Service() {
     private lateinit var lastmsg: JsonMsg
@@ -76,6 +69,7 @@ class MsgServer : Service() {
     private val server by lazy {
 
         embeddedServer(Netty, PORT, watchPaths = emptyList()) {
+            // Enables the server to send and recieve JSON objects
             install(ContentNegotiation){
                 json(Json {
                     prettyPrint = true
@@ -83,6 +77,8 @@ class MsgServer : Service() {
                 })
             }
             routing {
+                // A testing route to validate that a rout
+                // to the server exists
                 get("/") {
                     Log.v("GET", "DATA SENT")
                     call.respondText(
@@ -154,7 +150,8 @@ class MsgServer : Service() {
 
         createNotificationChannel(notificationManager)
 
-
+        // Foreground services must have a notification that is
+        // always open so users know its using resources
         val notificationBuilder = NotificationCompat.Builder(this, "msg channel")
             .setAutoCancel(false)
             .setOngoing(true)
@@ -184,16 +181,25 @@ class MsgServer : Service() {
     }
 
     suspend fun send(msg: String, convoName: String){
+        // Get the primary variables to build the message
+        //  - The contact for the address
+        //  - the primary users name as this is used
+        //    as the conversations name on the other users
+        //    device
+        //  - The AES encrypted message and convoname
         val contact: Contacts = repository.getContact(convoName)
         val primaryUser: PrimaryUser = repository.getPrimaryUserInfo()
         val convoEncrypt = encrypt(primaryUser.userName, contact.key)
         val msgEncrypt = encrypt(msg, contact.key)
 
+        // TODO("Add check for if response was ok and move this section")
         repository.addMsg(Msgs(0,"internal", convoName, msg,LocalDateTime.now().toString()))
 
+        // Build the message data class
         val Jmsg = JsonMsg(convoEncrypt,
             msgEncrypt)
 
+        // Sends the message and saves the response
         val response = client.post {
             url(contact.address)
             contentType(ContentType.Application.Json)
@@ -201,25 +207,33 @@ class MsgServer : Service() {
             setBody(Jmsg)
         }
 
-        Log.v("RES", response.toString())
-
     }
 
      fun encrypt(plain: String, keyString: String): String{
-        val iv: IvParameterSpec = IvParameterSpec("c4eb12ceccf2c3058d185f9356557e96".decodeHex())
-        val bytekey = keyString.decodeHex()
-        val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
-        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
-        cipher.init(Cipher.ENCRYPT_MODE, certKey, iv)
-        return Base64.getEncoder().encodeToString(cipher.doFinal(plain.toByteArray()))
+         // Generates and initialization vector
+         val iv: IvParameterSpec = IvParameterSpec("c4eb12ceccf2c3058d185f9356557e96".decodeHex())
+         val bytekey = keyString.decodeHex() // turns key string into bytes
+
+         // init the cipher module (This does the heavy lifting for us)
+         val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
+         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+         cipher.init(Cipher.ENCRYPT_MODE, certKey, iv)
+
+         // Encrypts the plain text byte array then encodes to a base64 string
+         return Base64.getEncoder().encodeToString(cipher.doFinal(plain.toByteArray()))
     }
 
     fun decrypt(coded: String, keyString: String): String{
+        // Generates and initialization vector
         val iv: IvParameterSpec = IvParameterSpec("c4eb12ceccf2c3058d185f9356557e96".decodeHex())
-        val bytekey = keyString.decodeHex()
+        val bytekey = keyString.decodeHex() // turns key string into bytes
+
+        // init the cipher module (This does the heavy lifting for us)
         val certKey = SecretKeySpec(bytekey, 0, bytekey.size, "AES" )
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
         cipher.init(Cipher.DECRYPT_MODE, certKey, iv)
+
+        // decodes the base64 string and unencrypts the message and casts it to a string.
         return String(cipher.doFinal(Base64.getDecoder().decode(coded)))
     }
 
