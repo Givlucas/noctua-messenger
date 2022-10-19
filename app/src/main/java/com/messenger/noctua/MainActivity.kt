@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.view.ActionMode
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toraddr: MutableLiveData<String>
     private lateinit var appViewModel: AppViewModel
 
-     private val ConnectToBound = object : ServiceConnection {
+      private val ConnectToBound = object : ServiceConnection {
          override fun onServiceConnected(p0: ComponentName?, service: IBinder?) {
              val binder = service as MsgServer.LocalBinder
              msgservice = binder.getService()
@@ -88,9 +90,24 @@ class MainActivity : AppCompatActivity() {
         return super.onSupportNavigateUp() || navController.navigateUp()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.action_bar_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.settings) {
+            findNavController(R.id.fragmentContainerView).navigate(R.id.action_contacts_nav_to_settings2)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     // Function provided so fragment can send messages
     internal suspend fun send(msg: String, convoName: String){
         msgservice?.send(msg, convoName)
     }
 
+    fun getConnectToBound(): ServiceConnection{
+        return ConnectToBound
+    }
 }

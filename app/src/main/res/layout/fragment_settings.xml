@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.messenger.noctua.ui.settings.settings">
+
+
+    <TextView
+        android:id="@+id/http_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="100dp"
+        android:text="Msg Server"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tor_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:text="Tor Server"
+        app:layout_constraintBottom_toBottomOf="@+id/http_tv"
+        app:layout_constraintStart_toEndOf="@+id/http_tv"
+        app:layout_constraintTop_toTopOf="@+id/http_tv"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/http_starten"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
+        android:text="start"
+        app:layout_constraintEnd_toEndOf="@+id/http_tv"
+        app:layout_constraintStart_toStartOf="@+id/http_tv"
+        app:layout_constraintTop_toBottomOf="@+id/http_tv" />
+
+    <Button
+        android:id="@+id/http_stopen"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:text="Stop"
+        app:layout_constraintEnd_toEndOf="@+id/http_starten"
+        app:layout_constraintStart_toStartOf="@+id/http_starten"
+        app:layout_constraintTop_toBottomOf="@+id/http_starten" />
+
+    <Button
+        android:id="@+id/http_restarten"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:text="restart"
+        app:layout_constraintEnd_toEndOf="@+id/http_stopen"
+        app:layout_constraintStart_toStartOf="@+id/http_stopen"
+        app:layout_constraintTop_toBottomOf="@+id/http_stopen" />
+
+    <Button
+        android:id="@+id/tor_starten"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
+        android:text="start"
+        app:layout_constraintEnd_toEndOf="@+id/tor_tv"
+        app:layout_constraintStart_toStartOf="@+id/tor_tv"
+        app:layout_constraintTop_toBottomOf="@+id/tor_tv" />
+
+    <Button
+        android:id="@+id/tor_stopen"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:text="Stop"
+        app:layout_constraintEnd_toEndOf="@+id/tor_starten"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tor_starten"
+        app:layout_constraintTop_toBottomOf="@+id/tor_starten" />
+
+    <Button
+        android:id="@+id/tor_restarten"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:text="restart"
+        app:layout_constraintEnd_toEndOf="@+id/tor_stopen"
+        app:layout_constraintStart_toStartOf="@+id/tor_stopen"
+        app:layout_constraintTop_toBottomOf="@+id/tor_stopen" />
+
+    <Button
+        android:id="@+id/all_starten"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="Start all"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/http_restarten" />
+
+    <Button
+        android:id="@+id/all_stopen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="stop all"
+        app:layout_constraintEnd_toEndOf="@+id/all_starten"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="@+id/all_starten"
+        app:layout_constraintTop_toBottomOf="@+id/all_starten" />
+
+    <Button
+        android:id="@+id/all_restarten"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="restart all"
+        app:layout_constraintEnd_toEndOf="@+id/all_stopen"
+        app:layout_constraintStart_toStartOf="@+id/all_stopen"
+        app:layout_constraintTop_toBottomOf="@+id/all_stopen" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

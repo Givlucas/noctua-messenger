@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_contacts_nav_to_primaryUserInfo"
             app:destination="@id/primaryUserInfo" />
+        <action
+            android:id="@+id/action_contacts_nav_to_settings2"
+            app:destination="@id/settings2" />
     </fragment>
     <fragment
         android:id="@+id/addcontact"
@@ -57,6 +60,15 @@
         tools:layout="@layout/fragment_primary_user_info" >
         <action
             android:id="@+id/action_primaryUserInfo_to_contacts_nav"
+            app:destination="@id/contacts_nav" />
+    </fragment>
+    <fragment
+        android:id="@+id/settings2"
+        android:name="com.messenger.noctua.ui.settings.settings"
+        android:label="settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settings2_to_contacts_nav"
             app:destination="@id/contacts_nav" />
     </fragment>
 </navigation>
