@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat
 import com.messenger.data.*
 import com.messenger.noctua.MainActivity
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -54,7 +55,11 @@ class MsgServer : Service() {
 
     // Initates the http cleint object
     // configuration is done here
+
     val client = HttpClient(Android){
+        engine{
+            proxy = ProxyBuilder.socks(host = "127.0.0.1", port = 9254)
+        }
         install(io.ktor.client.plugins.contentnegotiation.ContentNegotiation) {
             json(Json {
                 prettyPrint = true
@@ -206,6 +211,8 @@ class MsgServer : Service() {
             header(HttpHeaders.ContentType, Json)
             setBody(Jmsg)
         }
+
+        Log.v("MSG", response.toString())
 
     }
 
