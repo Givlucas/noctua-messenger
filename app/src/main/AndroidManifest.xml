@@ -20,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Noctua"
         android:extractNativeLibs="true"
+        android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
 
         <meta-data
