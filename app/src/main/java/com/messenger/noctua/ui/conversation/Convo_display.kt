@@ -21,6 +21,7 @@ import com.messenger.data.Msgs
 import com.messenger.msgServer.MsgServer
 import com.messenger.noctua.MainActivity
 import com.messenger.noctua.R
+import kotlinx.android.synthetic.main.fragment_convo_display.*
 import kotlinx.android.synthetic.main.fragment_convo_display.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,10 +47,9 @@ class Convo_display : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         appViewModel.getMsgs(convoName!!)
 
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-
         appViewModel.getMsgs(convoName).observe(viewLifecycleOwner, Observer { conversation ->
             adapter.setData(conversation)
+            recyclerView.scrollToPosition(adapter.itemCount - 1)
         })
 
         view.send_button.setOnClickListener{
