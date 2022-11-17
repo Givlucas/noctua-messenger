@@ -72,5 +72,11 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         return repository.contactExists(user)
     }
 
+    fun deleteChat(convoName: String){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.deleteChat(convoName)
+        }
+    }
+
 
 }

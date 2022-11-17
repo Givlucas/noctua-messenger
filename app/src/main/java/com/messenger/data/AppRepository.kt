@@ -68,5 +68,11 @@ class AppRepository(private val dao: DAO) {
         dao.updateAddress(addr)
     }
 
+    suspend fun deleteChat(convoName: String){
+        dao.deleteChat(convoName)
+        dao.deleteContact(convoName)
+        dao.deleteMsgs(convoName)
+    }
+
 
 }

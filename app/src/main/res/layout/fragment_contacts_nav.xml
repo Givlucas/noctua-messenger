@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.contacts.ContactsNav">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactRecyclerView"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -22,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
         android:clickable="true"
-        android:contentDescription="TODO"
         android:focusable="true"
         android:src="@drawable/ic_add_comment"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,4 +42,6 @@
         android:src="@drawable/ic_person_add"
         app:layout_constraintBottom_toTopOf="@+id/addConvofbt"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
