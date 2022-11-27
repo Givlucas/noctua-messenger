@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.settings) {
-            findNavController(R.id.fragmentContainerView).navigate(R.id.action_contacts_nav_to_settings2)
+            findNavController(R.id.fragmentContainerView).navigate(R.id.action_global_settings2)
         }
         return super.onOptionsItemSelected(item)
     }

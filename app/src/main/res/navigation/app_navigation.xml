@@ -71,6 +71,6 @@
         <action
             android:id="@+id/action_settings2_to_contacts_nav"
             app:destination="@id/contacts_nav" />
-    </fragment>
+    </fragment><action android:id="@+id/action_global_settings2" app:destination="@id/settings2"/>
 
 </navigation>
