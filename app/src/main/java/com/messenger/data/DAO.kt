@@ -34,6 +34,8 @@ interface DAO {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addMsg(msg: Msgs)
 
+
+
     // Selects all msgs that match the conversation` ID
     // and returns them ordered by their timestamp.
     // This is used in the UI to 
@@ -81,6 +83,15 @@ interface DAO {
     // Update primary user address
     @Query("UPDATE primary_user_table SET address=:addr WHERE id=0")
     fun updateAddress(addr: String)
+
+    @Query("DELETE FROM contacts_table WHERE user=:user")
+    fun deleteContact(user: String)
+
+    @Query("DELETE FROM conversation_table WHERE convoName=:convoName")
+    fun deleteChat(convoName: String)
+
+    @Query("DELETE FROM MSG_TABLE WHERE convo=:convoName")
+    fun deleteMsgs(convoName: String)
 
 
 }
