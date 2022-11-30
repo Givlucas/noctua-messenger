@@ -40,9 +40,8 @@ class primaryUserInfo : Fragment() {
 
         view.changeen.setOnClickListener{
             val newName = newNameet.text.toString()
-            val newAddress =newAddresset.text.toString()
-            if(inputCheck(newName, newAddress)) {
-                val primaryUser = PrimaryUser(0 ,newName, newAddress)
+            if(inputCheck(newName)) {
+                val primaryUser = PrimaryUser(0 ,newName, "")
                 appViewModel.addPrimaryUser(primaryUser)
                 Toast.makeText(requireContext(), "Success!", Toast.LENGTH_SHORT).show()
             } else {
@@ -52,7 +51,7 @@ class primaryUserInfo : Fragment() {
         return view
     }
 
-    private fun inputCheck(name: String, address: String): Boolean{
-        return (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(address))
+    private fun inputCheck(name: String): Boolean{
+        return (!TextUtils.isEmpty(name))
     }
 }

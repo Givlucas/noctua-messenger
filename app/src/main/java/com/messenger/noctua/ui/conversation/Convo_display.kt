@@ -59,9 +59,11 @@ class Convo_display : Fragment() {
                         view.write_msg_et.text.toString(),
                         convoName!!
                     )
-                } catch (e: Throwable){
+
+                } catch (e: Throwable) {
                     Log.v("OOP", e.toString())
                 }
+                view.write_msg_et.text.clear()
             }
         }
 
