@@ -1,5 +1,7 @@
+NO LLM OR AI TOOLS HAVE BEEN USED IN THE DEVELOPMENT OF THIS PROJECT.
+
 # noctua-messenger
-This is WIP project done for my seminar class at WVSU
+This is POC project done for my seminar class at WVSU
 The goal of the project is to create a secure peer-to-peer messageing platform using the tor and ethereum network.
 
 # Current progress
